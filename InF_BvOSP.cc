@@ -117,10 +117,10 @@ int main(int argc, char* argv[]){
     char* filename3 = new char[500];
     char* filename4 = new char[500];
 
-    sprintf(filename1,"DELSTDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
-    sprintf(filename2,"DELW_STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
-    sprintf(filename3,"DELA_STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
-    sprintf(filename4,"DELFR_STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
+    sprintf(filename1,"STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
+    sprintf(filename2,"W_STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
+    sprintf(filename3,"A_STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
+    sprintf(filename4,"FR_STDP+ButzSP(a=%.1f,Wmean=%.1f,beta=%.3f)fT4.5.dat",a,W_mean,p);
     
     ofstream data(filename1);
     ofstream W_file(filename2);
