@@ -129,12 +129,10 @@ int main(int argc, char* argv[]){
     
     // time stuff
     nSPupdate = 2000; // number of maximum SP updates allowed. 
-    hours = nSPupdate*20.0/60.0; // it is large enough to accomodate nSPupdate windows of arbitary duration from 1 to 51 minutes each
     msecs = 3600e3; // number of miliseconds in 1 hour
     dt = 0.5; // in ms
     dt_inv = 1/dt; // the height of a spike
     rtime0 = 600e3; // the relaxtion time without plasticity (in ms)
-    rtime = hours*msecs; // relax time with plasticity (in ms)
     Tw = 60e3; // window size in ms- the STRUCTURAL UPDATE INTERVAL
     nt = Tw/dt; // number of time steps in one Tw long window
     
@@ -159,16 +157,18 @@ int main(int argc, char* argv[]){
     Tsyn = 1.0; // in ms
     Tth = 5.0; // in ms
     tdelay = 3.; // in ms
-    Tslow = 30e3; // in ms
+    Tslow = 30e3;
     knoise = 0.06; // in mS/cm^2
     fnoise = 20; // in Hz
     tr = 4.0; // scales the depression time constant wrt potentiation
     tp = 10.0; // in ms
     td = tr*tp;
     eta = 0.02; // weight change quantum
-    ep = eta; 
+    ep = eta;
     ed = a*eta/tr; // As in Kromer and Tass's PRR 2020 Paper (Long-lasting desynchronization by decoupling stimulus)
     W_sd = 0.05; // standard deviation of weights
+    win_size = 10; // 5 on the right and 5 on the left
+    if(win_size%2==0) win_size+=1; // to keep the window size odd
     pi = 4*atan(1);
     max_err = 1e-3;
     
@@ -316,12 +316,11 @@ int main(int argc, char* argv[]){
     Avg_W = sum/in_con;
 
 //*********************************************SOME TIME WITHOUT PLASTICITY**********************************************//
-    num_itrn = rtime0/Tw; //cout << "nt" << num_itrn << endl;
+    num_itrn = rtime0/Tw; 
     for (int i = 0; i < num_itrn; i++){
         
         k = 0.0; // out of 'num_itrn' iterations without plasticity, first half are executed without coupling to let the neurons reach their stable natural firing rate
         if(i >= num_itrn/2) k = 8.0;
-
         for(int ii = 0; ii < N; ii++) counts[ii] = 0;
         odpr = 0;
 
@@ -332,7 +331,7 @@ int main(int argc, char* argv[]){
         for (int ii = 0; ii < N; ii++){ // for each neuron
             i_noise_spike = 0; // index of spike in the noise spike train
             for (int jj = 0; jj < n_noise_spikes; jj++){ 
-                rnd = -log(random.doub())/fnoise; // exp_rnd(rnd_generator);
+                rnd = -log(random.doub())/fnoise; 
                 i_noise_spike += int(rnd*1000/dt);
                 if (i_noise_spike >= nt) break;
                 noise_train[ii][i_noise_spike] = dt_inv;
@@ -344,6 +343,7 @@ int main(int argc, char* argv[]){
             current_time = i*Tw + j*dt;
             itrain = int(j%ntrain); // the index for time 'tdelay' before the current time 
 
+            // presynaptic train and trace
             for (int ii = 0; ii < N; ii++){ // for each neuron
                 train_pre[ii] = train[ii][itrain]; // delayed spike train
                 trace_pre[ii] = trace_pre[ii] + dt*(-trace_pre[ii]/tp + train_pre[ii]); // updating the presynaptic trace with the spike train 'tdelay' before the current time
@@ -429,8 +429,7 @@ int main(int argc, char* argv[]){
         cout << "Without plasticity: " << odpr << "  " << fi_mean << "   " << Avg_W << "   " << indeg << "   " << pruned << "  " << added << endl;  
     }
     
-//********************************************* transition to steady state with STDP and SP************************************************//
-    num_itrn = rtime/Tw; //cout << "num_itrn  " << num_itrn << endl;
+//********************************************* transition to steady state with STDP and SP ************************************************//
     iSPupdate = 0;
     k = 8.0;
     flg = 2;
@@ -460,6 +459,7 @@ int main(int argc, char* argv[]){
             current_time = rtime0 + i*Tw + j*dt;
             itrain = int(j%ntrain); // the index for time 'tdelay' before the current time 
 
+            // presynaptic train and trace
             for (int ii = 0; ii < N; ii++){ // for each neuron
                 train_pre[ii] = train[ii][itrain]; // delayed spike train
                 trace_pre[ii] = trace_pre[ii] + dt*(-trace_pre[ii]/tp + train_pre[ii]); // updating the presynaptic trace with the spike train 'tdelay' before the current time
@@ -553,8 +553,9 @@ int main(int argc, char* argv[]){
         
         if (i > 1*msecs/Tw && fi_err < max_err && Avg_Werr < max_err && flg == 2){ // at least for the first 1 hour, there is no structural update
             flg = 0;
+            // break; // uncomment if only STDP is desired, not SP
         }
-        if ( ((fi_err < max_err && Avg_Werr < max_err) || i%30 == 0) && flg == 0){ // (Avg_Werr < max_err && fi_err < max_err)
+        if ( ((fi_err < max_err && Avg_Werr < max_err) || i%30 == 0) && flg == 0){ 
             flg = 1;
             sp_it = i;
         } 
