@@ -159,18 +159,16 @@ int main(int argc, char* argv[]){
     Tsyn = 1.0; // in ms
     Tth = 5.0; // in ms
     tdelay = 3.; // in ms
-    Tslow = 30e3;
+    Tslow = 30e3; // in ms
     knoise = 0.06; // in mS/cm^2
     fnoise = 20; // in Hz
     tr = 4.0; // scales the depression time constant wrt potentiation
     tp = 10.0; // in ms
     td = tr*tp;
     eta = 0.02; // weight change quantum
-    ep = eta;
+    ep = eta; 
     ed = a*eta/tr; // As in Kromer and Tass's PRR 2020 Paper (Long-lasting desynchronization by decoupling stimulus)
     W_sd = 0.05; // standard deviation of weights
-    win_size = 10; // 5 on the right and 5 on the left
-    if(win_size%2==0) win_size+=1; // to keep the window size odd
     pi = 4*atan(1);
     max_err = 1e-3;
     
@@ -180,7 +178,7 @@ int main(int argc, char* argv[]){
     f1 = fT - delta_f/2;
     f2 = fT + delta_f/2;
     c1 = exp(-1.0/Wmin);
-    p0 = 0.01; // the probability of addition and pruning when a neuron's firing rate equals the given target rate
+    p0 = 0.01; // fraction of homeostatic addition and pruning probability when a neuron's firing rate equals the target rate
     nu = delta_f/(2*log((1-p0)/p0));
     Pw = 0.01;
     sprouting_rate = 1e-5;
