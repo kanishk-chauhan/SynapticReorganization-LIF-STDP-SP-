@@ -118,11 +118,11 @@ int main(int argc, char* argv[]){
     char* filename4 = new char[500];
     char* filename5 = new char[500];
 
-    sprintf(filename1,"DELSTDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
-    sprintf(filename2,"DELW_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
-    sprintf(filename3,"DELA_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
-    sprintf(filename4,"DELFR_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
-    sprintf(filename5,"DELSteady_state_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
+    sprintf(filename1,"STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
+    sprintf(filename2,"W_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
+    sprintf(filename3,"A_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
+    sprintf(filename4,"FR_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
+    sprintf(filename5,"Steady_state_STDP(a=%.1f,Wmean=%.1f,k=8,beta=%.3f).dat",a,W_mean,p);
 
     ofstream data(filename1);
     ofstream W_file(filename2);
