@@ -396,7 +396,7 @@ int main(int argc, char* argv[]){
             if (i > 0){
                 sumsin = 0; sumcos = 0;
                 for (int ii = 0; ii < N; ii++){
-                    phi[ii] = 2*pi*((current_time - spikeTimes0[ii])/(spikeTimes[ii] - spikeTimes0[ii]) + counts2[ii]);
+                    phi[ii] = 2*pi*((current_time - spikeTimes0[ii])/(spikeTimes[ii] - spikeTimes0[ii]) + counts2[ii]-1);
                     sumcos += cos(phi[ii]); sumsin += sin(phi[ii]);
                 }
                 odpr += sqrt(pow((sumcos/N),2) + pow((sumsin/N),2));
@@ -514,7 +514,7 @@ int main(int argc, char* argv[]){
             // order parameter
             sumsin = 0; sumcos = 0;
             for (int ii = 0; ii < N; ii++){
-                phi[ii] = 2*pi*((current_time - spikeTimes0[ii])/(spikeTimes[ii] - spikeTimes0[ii]) + counts2[ii]);
+                phi[ii] = 2*pi*((current_time - spikeTimes0[ii])/(spikeTimes[ii] - spikeTimes0[ii]) + counts2[ii]-1);
                 sumcos += cos(phi[ii]); sumsin += sin(phi[ii]);
             }
             odpr += sqrt(pow((sumcos/N),2) + pow((sumsin/N),2));
